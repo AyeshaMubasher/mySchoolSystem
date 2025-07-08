@@ -6,7 +6,7 @@ require_once 'config.php';
 if(isset($_POST['register'])){
     $name = $_POST['name'];
     $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $password = md5($_POST['password']);
     $mobileNumber = $_POST['mobileNumber'];
 
     //echo 'form data=  name: '.$name.' email: '.$email. 'password: '.password. ' mobileNumber: '.mobileNumber;
@@ -30,7 +30,7 @@ if(isset($_POST['login'])){
     $result = $conn->query("SELECT * FROM users WHERE email = '$email'");
     if($result->num_rows > 0){
         $user = $result->fetch_assoc();
-        if(password_verify($password, $user['password'])){
+        if(md5($password) === $user['password']){
             $_SESSION['name']= $user['name'];
             $_SESSION['email']= $user['email'];
             $_SESSION['mobileNumber']= $user['mobileNumber'];
