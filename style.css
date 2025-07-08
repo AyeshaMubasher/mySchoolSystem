@@ -132,3 +132,100 @@ h1 {
     text-align: center;
 }
 
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #7494ec;
+    color: white;
+    padding: 4px 10px;
+    font-size: 18px;
+}
+
+.navbar button {
+    background-color: white;
+    color: #7494ec;
+    border: none;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 4px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.navbar button:hover {
+    background-color: #f2f2f2;
+}
+
+.navbar-left {
+    font-size: 25px;       /* 👈 Change size */
+    color: #ffffff;        /* 👈 Change color */
+    font-weight: 500;      /* Optional: Make it bolder */
+}
+
+/* Main content */
+.home-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 70px); /* Subtract navbar height */
+    text-align: center;
+    background-color: #f9f9f9;
+    padding: 40px;
+}
+
+.home-content h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.home-content p {
+    font-size: 20px;
+    color: #555;
+}
+
+.user-table {
+    width: 90%;
+    max-width: 1000px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.user-table h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.pdf-button-container {
+    margin-top: 20px;
+    text-align: left; /* align left below the table */
+    margin-left: 150px;
+}
+
+.pdf-download-button {
+    background-color: #7494ec;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: auto;
+}
+
+.pdf-download-button:hover {
+    background-color: #5f79cc;
+}
+
+
+
+
