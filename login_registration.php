@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 require_once 'config.php';
 
@@ -31,6 +30,7 @@ if(isset($_POST['login'])){
     if($result->num_rows > 0){
         $user = $result->fetch_assoc();
         if(md5($password) === $user['password']){
+            $_SESSION['id']= $user['id'];
             $_SESSION['name']= $user['name'];
             $_SESSION['email']= $user['email'];
             $_SESSION['mobileNumber']= $user['mobileNumber'];
