@@ -8,14 +8,45 @@ if(isset($_POST['register'])){
     $password = md5($_POST['password']);
     $mobileNumber = $_POST['mobileNumber'];
 
-    //echo 'form data=  name: '.$name.' email: '.$email. 'password: '.password. ' mobileNumber: '.mobileNumber;
+    // Handle image
+    $image = $_FILES['user_image'];
+    $imageName = basename($image['name']);
+    $imageNameToSave = uniqid() . "_" . $imageName;
+    $targetFile =  UPLOAD_DIR. $imageNameToSave ;
+   
+    echo 
+    // Check file type (basic)
+    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+    $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
+
     $checkEmail = $conn->query("SELECT email FROM users WHERE email = '$email'");
-    //echo 'check email query result: '.$checkEmail;
     if ($checkEmail->num_rows > 0) {
         $_SESSION['register_error'] = 'Email is already registered!';
         $_SESSION['active_form'] = 'register';
     } else {
-        $conn->query("INSERT INTO users (name, email, password, mobileNumber) VALUES ('$name','$email','$password','$mobileNumber')");
+        //$conn->query("INSERT INTO users (name, email, password, mobileNumber) VALUES ('$name','$email','$password','$mobileNumber')");
+            if (in_array($imageFileType, $allowedTypes)) {
+                if (move_uploaded_file($image["tmp_name"], $targetFile)) {
+                    // Insert into DB with image path
+                    $stmt = $conn->prepare("INSERT INTO users (name, email, password, mobileNumber, image_path) VALUES (?, ?, ?, ?, ?)");
+                    $stmt->bind_param("sssss", $name, $email, $password, $mobileNumber, $imageNameToSave);
+                    
+                    if ($stmt->execute()) {
+                        /*
+                        header("Location: index.php?success=1");
+                        exit();
+                        */
+                    } else {
+                        echo "DB Error: " . $stmt->error;
+                    }
+
+                    $stmt->close();
+                } else {
+                    echo "Error uploading file.";
+                }
+            } else {
+                echo "Invalid image type. Only JPG, PNG, GIF allowed.";
+            }
     }
 
     header("Location: index.php");

@@ -42,13 +42,15 @@ function isActiveForm($formName, $activeForm){
         </div>
 
         <div class="form-box <?= isActiveForm('register', $activeForm); ?>" id="register-form">
-            <form action="login_registration.php" method="post">
+            <form action="login_registration.php" method="post" enctype="multipart/form-data">
                 <h2>Register</h2>
                 <?= showError($errors['register']); ?>
                 <input type="name" name="name" placeholder="Name" required>
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="mobileNumber" name="mobileNumber" placeholder="Mobile Number" required>
                 <input type="password" name="password" placeholder="Password" required>
+                <label>Upload Image:</label>
+                <input type="file" name="user_image" accept="image/*" required id="image" />
                 <button type="register" name="register">Register</button>
                 <p>Already have an account? <a href="#" onclick="showForm('login-form')">Login</a></p>
             </form>

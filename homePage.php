@@ -51,6 +51,10 @@ if(!isset($_SESSION['email'])){
     <button class="pdf-download-button" onclick="window.location.href='studentCard_pdf.php'">Download Users card PDF</button>
     </div>
 
+    <div class="pdf-button-container">
+    <button class="pdf-download-button" onclick="window.location.href='studentCard_pdf.php'">Download Users card PDF</button>
+    </div>
+
     <script>
         $(document).ready(function() {
             $('#usersTable').DataTable({

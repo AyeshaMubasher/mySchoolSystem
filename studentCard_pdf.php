@@ -1,78 +1,88 @@
 <?php
-
 session_start();
-if(isset($_SESSION['id'])){
-    $userId = $_SESSION['id'];
-}
-else{
+if (!isset($_SESSION['id'])) {
     header("Location: index.php");
     exit();
 }
 
-require('fpdf/fpdf.php'); 
-
-// Connect to DB
+require('fpdf/fpdf.php');
 require_once 'config.php';
 
-// Fetch one user record
-
-$result = $conn->query("SELECT * FROM users WHERE id = $userId ");
+// Get student data
+$userId = $_SESSION['id'];
+$result = $conn->query("SELECT * FROM users WHERE id = $userId");
 $student = $result->fetch_assoc();
 
-$pdf = new FPDF('P','mm',[90, 60]); // ID card size
+// Create landscape ID card
+$pdf = new FPDF('L', 'mm', [86, 58]);
+//$pdf = new FPDF();
 $pdf->AddPage();
 
-// Colors
-$headerColor = [40, 64, 163]; // Blue
+//set backgroun
+$pdf->SetFillColor(176, 224, 230); // Light blue background
+$pdf->Rect(0, 0, 86, 58, 'F');     // Card size (L, 86 x 58 mm)
+
+$pdf->SetDrawColor(33, 64, 154);   // Custom blue border
+$pdf->SetLineWidth(0.8);           // Medium thickness
+$pdf->Rect(0.5, 0.5, 85, 57, 'D'); // Slight inset border
+
+// === COLORS ===
+$headerColor = [33, 64, 154];
 $textColor = [0, 0, 0];
-$nameColor = [40, 64, 163];
 
-// === Header ===
+// === HEADER ===
 $pdf->SetFillColor(...$headerColor);
-$pdf->Rect(0, 0, 90, 15, 'F'); // Blue header
-$pdf->SetFont('Arial', 'B', 12);
+$pdf->Rect(0, 0, 86, 12, 'F');
 $pdf->SetTextColor(255, 255, 255);
-$pdf->SetXY(20, 5);
-$pdf->Cell(60, 5, 'My School', 0, 1, 'L');
+$pdf->SetFont('Arial', 'B', 14);
+$pdf->SetXY(5, 3);
+$pdf->Cell(70, 6, 'My School', 0, 1, 'L');
 
-// === Student Info ===
-$pdf->SetTextColor(...$textColor);
-$pdf->SetFont('Arial', '', 9);
-
-$y = 20;
-$pdf->SetXY(5, $y);
-$pdf->Cell(30, 5, 'User ID :', 0, 0);
-$pdf->Cell(40, 5, $student['id'], 0, 1);
-
-$pdf->SetX(5);
-$pdf->Cell(30, 5, 'Name :', 0, 0);
-$pdf->Cell(40, 5, $student['name'], 0, 1);
-
-$pdf->SetX(5);
-$pdf->Cell(30, 5, 'Phone :', 0, 0);
-$pdf->Cell(40, 5, $student['mobileNumber'], 0, 1);
-
-$pdf->SetX(5);
-$pdf->Cell(30, 5, 'Email :', 0, 0);
-$pdf->Cell(40, 5, $student['email'], 0, 1);
-
-/*
-// === Profile Image ===
-$imagePath = $student['photo']; // e.g., 'uploads/photo1.jpg'
+// === IMAGE ===
+$imagePath = UPLOAD_DIR . $student["image_path"];
 if (file_exists($imagePath)) {
-    $pdf->Image($imagePath, 60, 20, 20, 25); // X, Y, W, H
+    $pdf->Image($imagePath, 5, 15, 18, 24); // X, Y, W, H
 } else {
-    $pdf->Rect(60, 20, 20, 25); // Placeholder box
-    $pdf->SetXY(60, 33);
-    $pdf->SetFont('Arial', 'I', 7);
-    $pdf->Cell(20, 5, 'No Image', 0, 0, 'C');
+    $pdf->Rect(5, 15, 18, 24);
+    $pdf->SetXY(5, 27);
+    $pdf->SetFont('Arial', 'I', 6);
+    $pdf->Cell(18, 5, 'No Image', 0, 0, 'C');
 }
 
-// === Name at Bottom ===
-$pdf->SetFont('Arial', 'B', 11);
-$pdf->SetTextColor(...$nameColor);
-$pdf->SetXY(5, 50);
-$pdf->Cell(80, 8, $student['name'], 0, 1, 'C');
-*/
-$pdf->Output();
+// === STUDENT INFO using MultiCell ===
+$pdf->SetFont('Arial', '', 10);
+$pdf->SetTextColor(...$textColor);
+
+$infoX = 25;
+$infoY = 15;
+$lineHeight = 5;
+$labelWidth = 20;
+$valueWidth = 40;
+
+// User ID
+$pdf->SetXY($infoX, $infoY);
+$pdf->MultiCell($labelWidth, $lineHeight, "User ID :", 0, 'L');
+$pdf->SetXY($infoX + $labelWidth, $infoY);
+$pdf->MultiCell($valueWidth, $lineHeight, $student['id'], 0, 'L');
+
+// Name
+$pdf->SetXY($infoX, $infoY + $lineHeight);
+$pdf->MultiCell($labelWidth, $lineHeight, "Name :", 0, 'L');
+$pdf->SetXY($infoX + $labelWidth, $infoY + $lineHeight);
+$pdf->MultiCell($valueWidth, $lineHeight, $student['name'], 0, 'L');
+
+// Phone
+$pdf->SetXY($infoX, $infoY + 2 * $lineHeight);
+$pdf->MultiCell($labelWidth, $lineHeight, "Phone :", 0, 'L');
+$pdf->SetXY($infoX + $labelWidth, $infoY + 2 * $lineHeight);
+$pdf->MultiCell($valueWidth, $lineHeight, $student['mobileNumber'], 0, 'L');
+
+// Email (optional - fit only if needed)
+$pdf->SetXY($infoX, $infoY + 3 * $lineHeight);
+$pdf->MultiCell($labelWidth, $lineHeight, "Email :", 0, 'L');
+$pdf->SetXY($infoX + $labelWidth, $infoY + 3 * $lineHeight);
+$pdf->MultiCell($valueWidth, $lineHeight, $student['email'], 0, 'L');
+
+$pdf->Output(); // this is for view only 
+//$pdf->Output('D', 'userCard.pdf');
 ?>

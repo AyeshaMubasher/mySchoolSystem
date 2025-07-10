@@ -1,5 +1,7 @@
 <?php
 
+define('UPLOAD_DIR', 'uploads/');
+
 $host = "localhost";
 $user = "root";
 $password = "";
