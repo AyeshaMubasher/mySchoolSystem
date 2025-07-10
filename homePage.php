@@ -52,7 +52,7 @@ if(!isset($_SESSION['email'])){
     </div>
 
     <div class="pdf-button-container">
-    <button class="pdf-download-button" onclick="window.location.href='studentCard_pdf.php'">Download Users card PDF</button>
+    <button class="pdf-download-button" onclick="window.location.href='downloadExcle.php'">Download Excle File</button>
     </div>
 
     <script>
