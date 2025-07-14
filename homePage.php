@@ -19,6 +19,10 @@ if(!isset($_SESSION['email'])){
     <!----- DataTable CSS and JS--->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- Colorbox CSS and JS -->
+    <link rel="stylesheet" href="colorbox/example3/colorbox.css">
+    <script src="colorbox/jquery.colorbox-min.js"></script>
+
 </head>
 <body style="background: #fff;">
     <div class="navbar">
@@ -38,6 +42,7 @@ if(!isset($_SESSION['email'])){
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile Number</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
         </table>
@@ -62,10 +67,36 @@ if(!isset($_SESSION['email'])){
                 "columns":[
                     { "data": "name" },
                     { "data": "email" },
-                    { "data": "mobileNumber" }
+                    { "data": "mobileNumber" },
+                    {
+                      "data": "id",
+                      "render": function(data, type, row) {
+                        return '<a href="editUser.php?id=' + data + '" class="edit-link">' +
+                        '<img src="assets/edit.png" alt="Edit" style="width:20px; height:20px;">' +
+                        '</a>';
+                       }
+                    }
                 ]
             });
         });
+    </script>
+    <script>
+        $(document).ready(function () {
+        // Initialize Colorbox for Edit Links
+        $(document).on('click', '.edit-link', function (e) {
+            e.preventDefault();
+            $.colorbox({
+                href: $(this).attr('href'),
+                iframe: true,
+                width: "60%",  // reduce if too big
+                height: "90%", // reduce height
+                transition: "fade",
+                onClosed: function () {
+                    $('#usersTable').DataTable().ajax.reload();
+                }
+            });
+        });
+    });
     </script>
 </body>
 </html>

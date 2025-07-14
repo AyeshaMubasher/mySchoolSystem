@@ -226,6 +226,15 @@ h1 {
     background-color: #5f79cc;
 }
 
+.edit-link img {
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+.edit-link img:hover {
+    transform: scale(1.1);
+}
+
 
 
 
