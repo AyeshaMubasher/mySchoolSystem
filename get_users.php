@@ -2,7 +2,7 @@
 
 require_once 'config.php';
 
-$result = $conn->query("SELECT id,name,email,mobileNumber FROM users");
+$result = $conn->query("SELECT id,name,email,mobileNumber,dob FROM users");
 
 $users = [];
 

@@ -7,13 +7,14 @@ if(isset($_POST['register'])){
     $email = $_POST['email'];
     $password = md5($_POST['password']);
     $mobileNumber = $_POST['mobileNumber'];
+    $dob = $_POST['dob'];
 
     // Handle image
     $image = $_FILES['user_image'];
     $imageName = basename($image['name']);
     $imageNameToSave = uniqid() . "_" . $imageName;
     $targetFile =  UPLOAD_DIR. $imageNameToSave ;
-   
+
     echo 
     // Check file type (basic)
     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
@@ -28,8 +29,8 @@ if(isset($_POST['register'])){
             if (in_array($imageFileType, $allowedTypes)) {
                 if (move_uploaded_file($image["tmp_name"], $targetFile)) {
                     // Insert into DB with image path
-                    $stmt = $conn->prepare("INSERT INTO users (name, email, password, mobileNumber, image_path) VALUES (?, ?, ?, ?, ?)");
-                    $stmt->bind_param("sssss", $name, $email, $password, $mobileNumber, $imageNameToSave);
+                    $stmt = $conn->prepare("INSERT INTO users (name, email, password, mobileNumber, image_path, dob) VALUES (?, ?, ?, ?, ?, ?)");
+                    $stmt->bind_param("ssssss", $name, $email, $password, $mobileNumber, $imageNameToSave, $dob);
                     
                     if ($stmt->execute()) {
                         /*

@@ -42,6 +42,7 @@ if(!isset($_SESSION['email'])){
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile Number</th>
+                    <th>DOB</th>
                     <th>Edit</th>
                 </tr>
             </thead>
@@ -68,6 +69,7 @@ if(!isset($_SESSION['email'])){
                     { "data": "name" },
                     { "data": "email" },
                     { "data": "mobileNumber" },
+                    { "data": "dob"},
                     {
                       "data": "id",
                       "render": function(data, type, row) {

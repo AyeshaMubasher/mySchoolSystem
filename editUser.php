@@ -13,6 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $mobile = $_POST['mobileNumber'];
+    $dob = $_POST['dob'];
     $oldImageName = $_POST['old_image'];
 
 
@@ -41,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Update user
-    $stmt = $conn->prepare("UPDATE users SET name=?, email=?, mobileNumber=? , image_path=? WHERE id=?");
-    $stmt->bind_param("ssssi", $name, $email,$mobile , $newImageName, $id);
+    $stmt = $conn->prepare("UPDATE users SET name=?, email=?, mobileNumber=? , image_path=?, dob=? WHERE id=?");
+    $stmt->bind_param("sssssi", $name, $email,$mobile , $newImageName, $dob, $id);
     if (!$stmt->execute()) {
         echo "User update failed: " . $stmt->error;
     }
@@ -64,6 +65,9 @@ $conn->close();
     <title>Edit User</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!------DatePicker---->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 </head>
 <body>
 
@@ -78,6 +82,8 @@ $conn->close();
         Email: <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required><br><br>
         Mobile: <input type="text" name="mobileNumber" value="<?= htmlspecialchars($user['mobileNumber']) ?>" required><br><br>
 
+        <label for="dob">Date of Birth:</label>
+        <input type="text" id="dob" name="dob" value="<?= htmlspecialchars($user['dob']) ?>" required><br><br>
 
         Current Image:<br>
         <img src="<?= UPLOAD_DIR . htmlspecialchars($user['image_path']) ?>" width="150"><br><br>
@@ -88,6 +94,18 @@ $conn->close();
         </form>
     </div>
 </div>
+
+<script>
+$(function() {
+    $("#dob").datepicker({
+        dateFormat: "yy-mm-dd",
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+        maxDate: 0
+    });
+});
+</script>
 
 </body>
 </html>

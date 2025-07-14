@@ -235,6 +235,14 @@ h1 {
     transform: scale(1.1);
 }
 
+input#dob {
+    background: #eee;
+    border-radius: 6px;
+    padding: 12px;
+    border: none;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
 
 
 
