@@ -73,22 +73,32 @@ $conn->close();
 
 <div class="container">
     <div class="form-box active">
-        <h2>Edit User</h2>
         <form method="POST" action="editUser.php?id=<?= $user['id'] ?>" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?= $user['id'] ?>">
         <input type="hidden" name="old_image" value="<?= $user['image_path'] ?>">
 
-        Name: <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>" required><br><br>
-        Email: <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required><br><br>
-        Mobile: <input type="text" name="mobileNumber" value="<?= htmlspecialchars($user['mobileNumber']) ?>" required><br><br>
+        <div id="tabs">
+            <ul>
+                <li><a href="#tab-1">Basic Info</a></li>
+                <li><a href="#tab-2">Image & DOB</a></li>
+            </ul>
 
-        <label for="dob">Date of Birth:</label>
-        <input type="text" id="dob" name="dob" value="<?= htmlspecialchars($user['dob']) ?>" required><br><br>
+            <div id="tab-1">
+                Name: <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>" required><br><br>
+                Email: <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required><br><br>
+                Mobile: <input type="text" name="mobileNumber" value="<?= htmlspecialchars($user['mobileNumber']) ?>" required><br><br>
+            </div>
 
-        Current Image:<br>
-        <img src="<?= UPLOAD_DIR . htmlspecialchars($user['image_path']) ?>" width="150"><br><br>
+            <div id="tab-2">
+                <label for="dob">Date of Birth:</label>
+                <input type="text" id="dob" name="dob" value="<?= htmlspecialchars($user['dob']) ?>" required><br><br>
 
-        Change Image: <input type="file" name="user_image" accept="image/*"><br><br>
+                Current Image:<br>
+                <img src="<?= UPLOAD_DIR . htmlspecialchars($user['image_path']) ?>" width="150"><br><br>
+
+                Change Image: <input type="file" name="user_image" accept="image/*"><br><br>
+            </div>
+        </div>
 
         <button type="submit">Update</button>
         </form>
@@ -97,6 +107,7 @@ $conn->close();
 
 <script>
 $(function() {
+    $("#tabs").tabs();
     $("#dob").datepicker({
         dateFormat: "yy-mm-dd",
         changeMonth: true,
